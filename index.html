@@ -1,0 +1,1150 @@
+<!DOCTYPE html>   
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rent Car Service</title>
+<style>
+/* ---------- General Styles ---------- */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: #f4f4f4;
+}
+/* Floating WhatsApp Chat Button */
+.chat-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #25D366;
+  color: white;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  cursor: pointer;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
+  transition: transform 0.3s ease;
+  z-index: 999;
+}
+
+.chat-btn:hover {
+  transform: scale(1.1);
+  background: #1ebc57;
+}
+
+/* ---------- Header ---------- */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #222;
+  padding: 20px 50px;
+  color: white;
+  border-radius: 10px;
+}
+  .logo span {
+    color: rgb(199, 90, 90);
+    font-size: 30px;
+  }
+header nav a {
+  color: white;
+  text-decoration: none;
+  margin: 0 15px;
+}
+header nav a:hover {
+  color: #ff6600;
+}
+.auth-btn {
+  background: transparent;
+  border: 1px solid #fff;
+  color: white;
+  padding: 5px 12px;
+  margin-left: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: 0.3s;
+}
+.auth-btn:hover {
+  background: #ff6600;
+  border-color: #ff6600;
+}
+.auth-btn.signup {
+  background: #ff6600;
+  border: none;
+}
+.auth-btn.signup:hover {
+  background: #ff4500;
+}
+
+.hero {
+  background: url('web.png');
+  background-size: cover;
+  height:70vh;
+  position: relative;
+  bottom: 19px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color:black;
+  text-align: center;
+}
+.hero h1 {
+  font-size: 2.5rem;
+  position: relative;
+  bottom: 15px;
+}
+.hero p{
+  font-size: 1.6rem;
+  color:black;
+  position: relative;
+  bottom: 30px;
+}
+.hero #booknowbtn {
+  background: #ff6600;
+  border: none;
+  padding: 10px 20px;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 30px;
+  position: relative;
+  top: 15px;
+text-decoration: none;
+}
+.hero #booknowbtn:hover {
+  background: #ff4500;
+}
+
+
+/* ---------- Modals ---------- */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    width: 300px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.modal-content input, .modal-content button {
+    width: 100%;
+    margin: 8px 0;
+    padding: 8px;
+}
+
+.closeBtn {
+    float: right;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+/* ---------- Sections ---------- */
+section {
+    padding: 30px;
+    background: white;
+    margin: 20px auto;
+    width: 95%;
+    border-radius: 8px;
+}
+
+/* Cars Section */
+.cars {
+  padding: 50px 20px;
+  background: #f9f9f9;;
+  text-align: center;
+}
+
+.cars h2 {
+  font-size: 2.2rem;
+  margin-bottom: 50px;
+  color: #333;
+}
+
+/* Car list grid */
+.car-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* Car Card Style */
+.car-card {
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.car-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.15);
+}
+
+.car-card img {
+  width: 100%;
+  height: 150px;
+}
+
+.car-card h3 {
+  font-size: 1.3rem;
+  margin: 15px 0 5px;
+  color: #444;
+}
+
+.car-card p {
+  font-size: 1rem;
+  color: blue;
+}
+
+/* Rent Now Button */
+.rent-btn {
+  background: #ff4b2b;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin: 15px 0;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background 0.3s ease;
+}
+
+.rent-btn:hover {
+  background: #e8431d;
+}
+.zoom-in {
+  opacity: 0;
+  transform: scale(0.95) translateY(30px);
+  transition: all 1s ease;
+}
+
+.zoom-in.show {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+/* Discount Cars Section */
+#discount {
+  background: linear-gradient(135deg, #ffecd2, #fcb69f);
+  padding: 50px 20px;
+  text-align: center;
+}
+
+#discount h2 {
+  font-size: 2rem;
+  margin-bottom: 30px;
+  color: #222;
+  font-weight: bold;
+}
+
+/* Discount Cars Grid */
+.cars-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  max-width: 1100px;
+  height: auto;
+  margin: auto;
+}
+
+/* Each Car Card */
+.car {
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+}
+
+.car img {
+  width: 100%;
+  height: 140px;
+}
+
+.car h3 {
+  padding: 15px;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+/* Discount Tag */
+.car.discount::before {
+  content: "30% OFF";
+  position: absolute;
+  top: 10px;
+  left: -20px;
+  background: #ff4b2b;
+  color: white;
+  padding: 5px 15px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  transform: rotate(-15deg);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Hover Effect */
+.car:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.15);
+}
+.price {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #28a745;
+    position: relative;
+    bottom:10px ;
+}
+
+.order-btn {
+    background: #ff6600;
+    color: white;
+    padding: 8px 15px;
+    position: relative;
+    bottom: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+}
+
+.order-btn:hover {
+    background: #ff4500;
+}
+
+/* ---------- About Me ---------- */
+/* Section Styling */
+#about {
+    padding: 30px 0;
+    background:white;
+    width: 1230px;
+}
+
+/* Container Layout */
+.about-container {
+    width: 1100px;
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 30px;
+}
+
+/* Text Styling */
+.about-text {
+    flex: 1;
+    min-width: 300px;
+}
+
+.about-text h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.about-text p {
+    line-height: 1.7;
+    font-size: 1.1rem;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+.about-text strong {
+    color: #ff5733;
+}
+
+/* Button Styling */
+.about-btn {
+    display: inline-block;
+    padding: 12px 25px;
+    background: linear-gradient(45deg, #ff5733, #ff914d);
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 30px;
+    transition: all 0.3s ease;
+}
+
+.about-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+/* Image Styling */
+.about-image {
+    flex: 1;
+    min-width: 300px;
+}
+
+.about-image img {
+    width: 75%;
+    position: relative;
+    left: 130px;
+    border-radius: 50px;
+}
+.slide-text {
+  opacity: 0;
+  transform: translateX(-120px);
+  transition: all 4s ease;
+}
+.slide-text.show {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* About Image Slide (Right → Left) */
+.slide-image {
+  opacity: 0;
+  transform: translateX(120px);
+  transition: all 4s ease;
+}
+.slide-image.show {
+  opacity: 1;
+  transform: translateX(0);
+}
+/* ---------- Latest News ---------- */
+#news {
+  background: linear-gradient(135deg, #fff, #f4f4f9);
+  padding: 60px 20px;
+  text-align: center;
+  border-radius: 12px;
+  margin: 30px auto;
+  width: 95%;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+#news h2 {
+  font-size: 2.3rem;
+  margin-bottom: 40px;
+  color: #222;
+  font-weight: bold;
+  position: relative;
+}
+
+#news h2::after {
+  content: "";
+  display: block;
+  width: 80px;
+  height: 3px;
+  background: #ff6600;
+  margin: 10px auto 0;
+  border-radius: 2px;
+}
+
+.news-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  max-width: 1100px;
+  margin: auto;
+}
+
+.news-card {
+  background: white;
+  padding: 25px;
+  border-radius: 15px;
+  text-align: left;
+  position: relative;
+  box-shadow: 0px 6px 20px rgba(0,0,0,0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.news-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0px 10px 25px rgba(0,0,0,0.15);
+}
+
+.news-icon {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.news-card h3 {
+  color: #ff6600;
+  margin-bottom: 10px;
+  font-size: 1.4rem;
+}
+
+.news-card p {
+  color: #555;
+  font-size: 1rem;
+  margin-bottom: 15px;
+  line-height: 1.6;
+}
+
+.news-card .date {
+  font-size: 0.85rem;
+  color: blue;
+  font-style: italic;
+}
+
+/* Highlight Special News */
+.news-card.highlight {
+  border-left: 6px solid #ff6600;
+  background: #fff8f3;
+}
+
+/* ---------- Customer Reviews ---------- */
+#reviews {
+  background: honeydew;
+  padding: 50px 20px;
+  text-align: center;
+  border-radius: 8px;
+  margin: 20px auto;
+  width: 95%;
+}
+
+#reviews h2 {
+  font-size: 2rem;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+.reviews-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  max-width: 1100px;
+  margin: auto;
+   animation: slide 20s linear infinite;
+}
+
+@keyframes slide {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.review-card {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.review-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 8px 15px rgba(0,0,0,0.15);
+}
+
+.review-card img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin-bottom: 15px;
+}
+
+.review-card h3 {
+  margin: 10px 0 5px;
+  font-size: 1.2rem;
+  color: #444;
+}
+
+.review-card p {
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 1.6;
+}
+
+.stars {
+  color: #ffcc00;
+  margin: 8px 0;
+  font-size: 1.1rem;
+}
+
+/* ---------- Contact Section ---------- */
+#contact {
+  background: #fff;
+  padding: 50px 20px;
+  text-align: center;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+#contact h2 {  
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.contact-form {
+  max-width: 480px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.contact-form input,
+.contact-form textarea {
+  padding: 10px;
+  width: auto;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.contact-form button {
+  background: #ff6600;
+  color: white;
+  padding: 12px;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  border-radius: 5px;
+  transition: background 0.3s ease;
+}
+
+.contact-form button:hover {
+  background: #ff4500;
+}
+/* Popup Background */
+.popup {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+}
+
+/* Popup Box */
+.popup-content {
+    background: #fff;
+    width: 400px;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 8px;
+    position: relative;
+}
+
+/* Close Button */
+.close {                        
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* Form Styling */
+form label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+}
+form input, form button {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+form button {
+    background: #ff4d4d;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+}
+form button:hover {
+    background: #e63e3e;
+}
+ .classic-footer {
+  background-color:rgb(248, 244, 241);;
+  color:black;
+  padding: 40px 20px 10px;
+  font-size: 15px;
+}
+
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 30px;
+  max-width: 1200px;
+  margin: auto;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #444;
+}
+
+.footer-column {
+  flex: 1;
+  min-width: 250px;
+}
+
+.footer-column h3 {
+  font-size: 24px;
+  color: #c47f17;
+  margin-bottom: 10px;
+}
+
+.footer-column h3 span {
+  color: rgb(199, 90, 90);
+}
+
+.footer-column h4 {
+  color:black;
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+.footer-column ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-column ul li {
+  margin-bottom: 8px;
+}
+
+.footer-column ul li a {
+  color: black;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.footer-column ul li a:hover {
+  color:blue;
+}
+.footer-bottom {
+  text-align: center;
+  padding-top: 15px;
+  color: black;
+  font-size: 14px;
+  border-top: 1px solid #444;
+}
+.footer-icons a {
+  margin: 0 10px;
+}
+
+.footer-icons img {
+  width: 24px;
+  height: 24px;
+  transition: transform 0.3s ease;
+}
+
+.footer-icons img:hover {
+  transform: scale(1.2);
+}
+.hamburger {
+  display: none;
+  font-size: 28px;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* ---------- Mobile Styles ---------- */
+@media (max-width: 768px) {
+  header nav {
+    position: absolute;
+    top: 60px;           
+    right: 0;
+    background: #222;
+    width: 220px;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+    display: none;       
+    flex-direction: column;
+    align-items: flex-start;
+    z-index: 1000;
+  }
+
+  header nav.active {     
+    display: flex;
+  }
+  header nav a,
+  header nav .auth-btn {
+    width: 100%;
+    text-align: left;
+    margin: 5px 0;
+  }
+ .hamburger {
+    display: block;
+  }
+  img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 8px; /* optional styling */
+}
+
+</style>
+</head>
+<body>
+<a href="https://wa.me/923001234567" target="_blank" class="chat-btn" title="Chat with us on WhatsApp">
+  💬
+</a>
+<!-- Header -->
+<header>
+  <div class="logo"><img src="logo2.jpg" alt="sample" width="70px" height="25px"> <span>RentCar</span></div>
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#cars">Cars</a>
+    <a href="#contact">Contact</a>
+    <button id="signinBtn" class="auth-btn">Sign In</button>
+    <button id="signupBtn" class="auth-btn signup">Sign Up</button>
+  </nav>
+   <div class="hamburger" onclick="toggleMenu()">☰</div>
+  </header>
+</header>
+<section id="home" class="hero">
+  <div class="hero-text">
+    <h1>Drive Your Dream Car Today</h1>
+    <p>Affordable rentals with top-class service</p>
+    <a href="#contact" id="booknowbtn">Book Now</a>
+  </div>
+</section>
+
+<!-- Sign In Modal -->
+<div id="signinModal" class="modal">
+  <div class="modal-content">
+    <span class="closeBtn">&times;</span>
+    <h2>Sign In</h2>
+    <input type="email" placeholder="Email" required>
+    <input type="password" placeholder="Password" required>
+    <button>Sign In</button>
+  </div>
+</div>
+
+<!-- Sign Up Modal -->
+<div id="signupModal" class="modal">
+  <div class="modal-content">
+    <span class="closeBtn">&times;</span>
+    <h2>Sign Up</h2>
+    <input type="text" placeholder="Name" required>
+    <input type="email" placeholder="Email" required>
+    <input type="password" placeholder="Password" required>
+    <button>Sign Up</button>
+  </div>
+</div>
+<!-- Popup Form (Hidden by Default) -->
+<div id="rentForm" class="popup">
+    <div class="popup-content">
+        <span id="closePopup" class="close">&times;</span>
+        <h2>Rent a Car</h2>
+        <form>
+            <label>Your Name</label>
+            <input type="text" placeholder="Enter your name" required>
+
+            <label>Email</label>
+            <input type="email" placeholder="Enter your email" required>
+
+            <label>Car Name</label>
+            <input type="text" id="carName" readonly>
+
+            <label>Rental Days</label>
+            <input type="number" min="1" value="1" required>
+
+            <button type="submit">Confirm Booking</button>
+        </form>
+    </div>
+</div>
+
+<section id="cars" class="cars">
+  <h2>Available Cars</h2>
+  <div class="car-list">
+     <div class="car-card zoom-in">
+      <img src="tot.jpg" alt="Toyota Corolla">
+      <h3>Toyota Corolla</h3>
+      <p>Price: $50/day</p>
+      <button class="rent-btn">Rent Now</button>
+    </div>
+    <div class="car-card zoom-in">
+      <img src="ho.jpg" alt="Honda Civic">
+      <h3>Honda Civic</h3>
+      <p>Price: $60/day</p>
+      <button class="rent-btn">Rent Now</button>
+    </div>
+    <div class="car-card zoom-in">
+      <img src="bmw.avif" alt="BMW X5">
+      <h3>BMW X5</h3>
+      <p>Price: $120/day</p>
+      <button class="rent-btn">Rent Now</button>
+    </div>
+    <div class="car-card zoom-in">
+      <img src="audi.jpg" alt="Audi A4">
+      <h3>Audi A4</h3>
+      <p>Price: $80/day</p>
+      <button class="rent-btn">Rent Now</button>
+    </div> 
+    <div class="car-card zoom-in">
+      <img src="fg.jpg" alt="Mercedes C-Class">
+      <h3>Mercedes C-Class</h3>
+      <p>Price: $90/day</p>
+      <button class="rent-btn">Rent Now</button>
+    </div>
+
+    <div class="car-card zoom-in">
+      <img src="fo.avif" alt="Ford Mustang">
+      <h3>Ford Mustang</h3>
+      <p>Price: $150/day</p>
+      <button class="rent-btn">Rent Now</button>
+    </div>
+
+    <div class="car-card zoom-in">
+      <img src="ni.webp" alt="Nissan Altima">
+      <h3>Nissan Altima</h3>
+      <p>Price: $55/day</p>
+      <button class="rent-btn">Rent Now</button>
+    </div>
+
+    <div class="car-card zoom-in">
+      <img src="kia.jpg" alt="Kia Sportage">
+      <h3>Kia Sportage</h3>
+      <p>Price: $65/day</p>
+      <button class="rent-btn">Rent Now</button>
+    </div>
+  </div>
+</section>
+
+<!-- Discount Cars -->
+<section id="discount">
+    <h2>Special Discount - 30% OFF</h2>
+    <div class="cars-grid">
+        <div class="car discount">
+            <img src="df.webp" alt="Car">
+            <h3>Honda Accord</h3>
+            <p class="price">$70/day</p>
+            <button class="order-btn">Rent Now</button>
+        </div>
+        <div class="car discount">
+            <img src="test.jpg" alt="Car">
+            <h3>Tesla Model 3</h3>
+            <p class="price">$90/day</p>
+            <button class="order-btn">Rent Now</button>
+        </div>
+        <div class="car discount">
+            <img src="gg.avif" alt="Car">
+            <h3>Chevrolet Camaro</h3>
+            <p class="price">$100/day</p>
+            <button class="order-btn">Rent Now</button>
+        </div>
+        <div class="car discount">
+            <img src="jh.avif" alt="Car">
+            <h3>Range Rover Evoque</h3>
+            <p class="price">$120/day</p>
+            <button class="order-btn">Rent Now</button>
+        </div>
+    </div>
+</section>
+
+<section id="about">
+  <div class="about-container">
+    <div class="about-text slide-text">
+      <h2>About Me</h2>
+      <p>
+        Hello! I’m the founder of <strong>RentCar</strong>, passionate about making car rentals 
+        easy, affordable, and reliable for everyone. My goal is to give you the best driving 
+        experience without the hassle of ownership. Whether it’s for business, vacation, or a 
+        weekend trip, we’ve got the perfect car for you!
+      </p>
+      <a href="#contact" class="about-btn">Book Now 🚗</a>
+    </div>
+
+    <div class="about-image slide-image">
+      <img src="th.avif" alt="About Me">
+    </div>
+</div>
+</section>
+
+<!-- Latest News Section -->
+<section id="news">
+  <h2>📰 Latest News & Updates</h2>
+  <div class="news-container">
+    <div class="news-card">
+      <div class="news-icon">🚘</div>
+      <h3>New Luxury Cars Added</h3>
+      <p>We’ve added <strong>BMW 7 Series</strong> and <strong>Mercedes S-Class</strong> to our fleet. 
+         Perfect for weddings, corporate events, and luxury travel!</p>
+      <span class="date">Feb 15, 2025</span>
+    </div>
+
+    <div class="news-card highlight">
+      <div class="news-icon">🔥</div>
+      <h3>Weekend Mega Discount</h3>
+      <p>Book this weekend and enjoy <strong>20% OFF</strong> on all vehicles. 
+         Limited-time offer, don’t miss out!</p>
+      <span class="date">Feb 10, 2025</span>
+    </div>
+
+    <div class="news-card">
+      <div class="news-icon">📦</div>
+      <h3>Free Delivery Service</h3>
+      <p>Now offering <strong>free car delivery</strong> within Lahore 
+         for bookings of 3 days or more. Hassle-free rentals at your doorstep!</p>
+      <span class="date">Feb 5, 2025</span>
+    </div>
+  </div>
+</section>
+
+<!-- Customer Reviews -->
+<section id="reviews">
+  <h2>What Our Customers Say</h2>
+  <div class="reviews-container">
+    <div class="review-card">
+      <img src="https://i.pravatar.cc/100?img=1" alt="Customer">
+      <h3>Ali Khan</h3>
+      <div class="stars">★★★★★</div>
+      <p>"Great experience! The car was clean and well-maintained. The booking process was super easy. Highly recommend RentCar!"</p>
+    </div>
+    <div class="review-card">
+      <img src="https://i.pravatar.cc/100?img=2" alt="Customer">
+      <h3>Sara Ahmed</h3>
+      <div class="stars">★★★★☆</div>
+      <p>"Affordable prices and friendly customer service. I’ll definitely rent again for my next trip."</p>
+    </div>
+    <div class="review-card">
+      <img src="https://i.pravatar.cc/100?img=3" alt="Customer">
+      <h3>John Smith</h3>
+      <div class="stars">★★★★★</div>
+      <p>"Amazing service! The car was ready on time and in perfect condition. Truly hassle-free."</p>
+    </div>
+  </div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact">
+  <h2>Contact Us</h2>
+  <form class="contact-form">
+    <input type="text" placeholder="Your Name" required>
+    <input type="email" placeholder="Your Email" required>
+    <textarea placeholder="Your Message" rows="5" required></textarea>
+    <button type="submit">Send Message</button>
+  </form>
+</section>
+<!-- Car Rent Service Footer -->
+<footer class="classic-footer">
+  <div class="footer-container">
+    
+    <!-- Company Info -->
+    <div class="footer-column">
+      <h3>Swift<span>CarRent</span></h3>
+      <p>Drive Your Dream Today!</p>
+    </div>
+    
+    <!-- Quick Links -->
+    <div class="footer-column">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#cars">Available Cars</a></li>
+        <li><a href="#offers">Special Offers</a></li>
+        <li><a href="#about">About Us</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+    
+    <!-- Contact Info -->
+    <div class="footer-column">
+      <h4>Contact</h4>
+      <p>Email: <a href="mailto:info@swiftrentcar.com">info@swiftrentcar.com</a></p>
+      <p>Phone: <a href="tel:+923001234567">+92-300-1234567</a></p>
+      <p>Location: Lahore, Pakistan</p>
+    </div>
+
+    <!-- Social Media Icons -->
+    <p class="footer-icons">
+      <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/145/145802.png" alt="Facebook"></a>
+      <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram"></a>
+      <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/145/145812.png" alt="Twitter"></a>
+    </p>
+  </div>
+
+  <!-- Footer Bottom -->
+  <div class="footer-bottom">
+    <p>&copy; 2025 Swift CarRent. All rights reserved.</p>
+  </div>
+</footer>
+<script>
+// Modal Script
+const signinModal = document.getElementById("signinModal");
+const signupModal = document.getElementById("signupModal");
+const signinBtn = document.getElementById("signinBtn");
+const signupBtn = document.getElementById("signupBtn");
+const closeBtns = document.querySelectorAll(".closeBtn");
+
+signinBtn.onclick = () => signinModal.style.display = "flex";
+signupBtn.onclick = () => signupModal.style.display = "flex";
+
+closeBtns.forEach(btn => btn.onclick = () => {
+    signinModal.style.display = "none";
+    signupModal.style.display = "none";
+});
+
+const popup = document.getElementById("rentForm");
+const closePopup = document.getElementById("closePopup");
+const carNameInput = document.getElementById("carName");// Get elements
+
+
+// Open form when Rent/Order button clicked
+document.querySelectorAll(".rent-btn, .order-btn").forEach(button => {
+    button.addEventListener("click", (e) => {
+        const carCard = e.target.closest(".car-card, .car");
+        const carTitle = carCard.querySelector("h3").textContent;
+        carNameInput.value = carTitle; // Set car name in form
+        popup.style.display = "block";
+    });
+});
+
+// Close popup
+closePopup.addEventListener("click", () => {
+    popup.style.display = "none";
+});
+
+// Close when clicking outside
+window.addEventListener("click", (e) => {
+    if (e.target === popup) {
+        popup.style.display = "none";
+    }
+});
+
+window.onclick = (e) => {
+    if (e.target === signinModal) signinModal.style.display = "none";
+    if (e.target === signupModal) signupModal.style.display = "none";
+};
+
+  function toggleMenu() {   
+  const navbar = document.querySelector("header nav");
+  navbar.classList.toggle("active");
+}
+
+const animatedElements = document.querySelectorAll('.zoom-in, .slide-text, .slide-image' );
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('show');
+    } else {
+      entry.target.classList.remove('show');
+    }
+  });
+}, { threshold: 0.2 });
+
+animatedElements.forEach(el => observer.observe(el));
+
+
+</script>
+</body>
+</html>
